@@ -5,12 +5,12 @@ from text import *
 import re
 import itertools
 
-URL_SGSPU = 'http://www.pgsga.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
-ID_SGSPU_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
-ID_SGSPU_PP = ['class', 'table table-bordered table-condensed table-scroll-thead table-free-cel']
+URL_SGSPU_B = 'http://www.pgsga.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
+ID_SGSPU_B_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
+ID_SGSPU_B_PP = ['class', 'table table-bordered table-condensed table-scroll-thead table-free-cel']
 
 
-def parse(url, teg):
+def parse_sgspuB(url, teg):
     r = requests.get(url, headers=HEADERS)
     r.encoding = 'utf-8'
     html = r
@@ -29,8 +29,8 @@ def parse(url, teg):
 
 
 # форматирование списка образовальных программ
-def plan_priema():
-    newsList = parse(URL_SGSPU, ID_SGSPU_PP)
+def plan_priema_sgspuB():
+    newsList = parse_sgspuB(URL_SGSPU_B, ID_SGSPU_B_PP)
     del newsList[:4]
     for i in range(len(newsList)):
         for j in range(len(newsList[i])):
@@ -40,9 +40,9 @@ def plan_priema():
 
 
 # форматирование списка образовальных программ
-def arrayFormatting():
+def arrayFormatting_sgspuB():
     list_super_new = []
-    newsList = parse(URL_SGSPU, ID_SGSPU_VI)
+    newsList = parse_sgspuB(URL_SGSPU_B, ID_SGSPU_B_VI)
     del newsList[:2]
     an_iterator = itertools.groupby(newsList, lambda x: x[0])
     newL = []
@@ -57,12 +57,12 @@ def arrayFormatting():
 
 
 # проверка на наличие всех выбранных предметов в списке строки образовательной программы
-def subjectInRow(subList, List):
+def subjectInRow_sgspuB(subList, List):
     return set(subList) <= set(List)
 
 
 # выделение из элемента списка образовательной программы, всех предметов и их баллах
-def viewSubjectAndBall(row):
+def viewSubjectAndBall_sgspuB(row):
     SubjectAndBall = []
     for i in range(2, len(row)):
         if (row[i] in SUBJECT) or (re.match(r"\d\d", row[i]) and (not re.match(r"\d\d\.", row[i]))):
@@ -70,15 +70,15 @@ def viewSubjectAndBall(row):
     return SubjectAndBall
 
 
-# доступные студенту образовательные программы по выбранным предметам
-def availableToMe(subject):
-    array_first = arrayFormatting()
-    planList = plan_priema()
+# доступные абитуриенту образовательные программы СГСПУ по выбранным предметам
+def availableToMe_sgspuB(subject):
+    array_first = arrayFormatting_sgspuB()
+    planList = plan_priema_sgspuB()
     out_all = []
 
     for i in range(len(array_first)):
-        if len(array_first[i]) == 22 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        if len(array_first[i]) == 22 and (subjectInRow_sgspuB(subject, array_first[i]) is True):
+            array_second = viewSubjectAndBall_sgspuB(array_first[i])
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
@@ -106,8 +106,8 @@ def availableToMe(subject):
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
             })
-        elif len(array_first[i]) == 28 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        elif len(array_first[i]) == 28 and (subjectInRow_sgspuB(subject, array_first[i]) is True):
+            array_second = viewSubjectAndBall_sgspuB(array_first[i])
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
@@ -137,7 +137,74 @@ def availableToMe(subject):
             })
     return out_all
 
-test = ['Биология']
+
+# все образовательные программы СГСПУ - бакалавриат
+def availableToAll_sgspuB():
+    array_first = arrayFormatting_sgspuB()
+    planList = plan_priema_sgspuB()
+    out_all = []
+
+    for i in range(len(array_first)):
+        if len(array_first[i]) == 22:
+            array_second = viewSubjectAndBall_sgspuB(array_first[i])
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][2]),
+                'level': 'bachelor',
+                'subject_1': str(array_second[0]),
+                'ball_1': str(array_second[1]),
+                'subject_2': str(array_second[2]),
+                'ball_2': str(array_second[3]),
+                'subject_3': str(array_second[4]),
+                'ball_3': str(array_second[5]),
+                'subject_4': "-",
+                'ball_4': "-",
+                'plan_all': str(planList[i][4]),
+                'kcp': str(planList[i][5]),
+                'special_o': str(planList[i][6]),
+                'special_z': str(planList[i][7]),
+                'special_oz': str(planList[i][8]),
+                'general_o': str(planList[i][9]),
+                'general_z': str(planList[i][10]),
+                'general_oz': str(planList[i][11]),
+                'goal_o': str(planList[i][12]),
+                'goal_oz': str(planList[i][13]),
+                'goal_z': str(planList[i][14]),
+                'pay_o': str(planList[i][15]),
+                'pay_z': str(planList[i][16]),
+                'pay_oz': str(planList[i][17])
+            })
+        elif len(array_first[i]) == 28:
+            array_second = viewSubjectAndBall_sgspuB(array_first[i])
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][2]),
+                'level': 'bachelor',
+                'subject_1': str(array_second[0]),
+                'ball_1': str(array_second[1]),
+                'subject_2': str(array_second[2]),
+                'ball_2': str(array_second[3]),
+                'subject_3': str(array_second[4]),
+                'ball_3': str(array_second[5]),
+                'subject_4': str(array_second[6]),
+                'ball_4': str(array_second[7]),
+                'plan_all': str(planList[i][4]),
+                'kcp': str(planList[i][5]),
+                'special_o': str(planList[i][6]),
+                'special_z': str(planList[i][7]),
+                'special_oz': str(planList[i][8]),
+                'general_o': str(planList[i][9]),
+                'general_z': str(planList[i][10]),
+                'general_oz': str(planList[i][11]),
+                'goal_o': str(planList[i][12]),
+                'goal_oz': str(planList[i][13]),
+                'goal_z': str(planList[i][14]),
+                'pay_o': str(planList[i][15]),
+                'pay_z': str(planList[i][16]),
+                'pay_oz': str(planList[i][17])
+            })
+    return out_all
+
 
 with open('src/sgspu_bach.json', 'w', encoding="utf-8") as fp:
-    json.dump(availableToMe(test), fp, ensure_ascii=False)
+    json.dump(availableToAll_sgspuB(), fp, ensure_ascii=False)

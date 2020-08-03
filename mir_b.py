@@ -6,12 +6,12 @@ import re
 import itertools
 import numpy as np
 
-URL = 'https://www.imi-samara.ru/abitur/bachelor/'
-ID_VI = 0
-ID_PP = 1
+URL_MIR_B = 'https://www.imi-samara.ru/abitur/bachelor/'
+ID_MIR_B_VI = 0
+ID_MIR_B_PP = 1
 
 
-def parse(url, teg):
+def parse_mirB(url, teg):
     r = requests.get(url, headers=HEADERS)
     r.encoding = 'utf-8'
     html = r
@@ -31,8 +31,8 @@ def parse(url, teg):
 
 
 # форматирование списка образовальных программ
-def plan_priema(teg):
-    newsList = parse(URL, teg)
+def plan_priema_mirB(teg):
+    newsList = parse_mirB(URL_MIR_B, teg)
     del newsList[:3]
     for i in range(len(newsList)):
         for j in range(len(newsList[i])):
@@ -42,8 +42,8 @@ def plan_priema(teg):
 
 
 # форматирование списка образовальных программ
-def arrayFormatting():
-    newsList = parse(URL, ID_VI)
+def arrayFormatting_mirB():
+    newsList = parse_mirB(URL_MIR_B, ID_MIR_B_VI)
     count = 0  # сколько направлений подготовки
     del newsList[:2]
     newsList2 = list(itertools.chain.from_iterable(newsList))
@@ -56,13 +56,25 @@ def arrayFormatting():
     return arr
 
 
+# сортировка по 2 элементу (алф.порядок) двоих списков и объеденение их
+def mergerSortList():
+    listPP = plan_priema_mirB(ID_MIR_B_PP)
+    listVI = arrayFormatting_mirB()
+    sortVI = sorted(listVI, key=lambda x: x[1])
+    sortPP = sorted(listPP, key=lambda x: x[1])
+    for i in range(len(sortVI)):
+        if sortVI[i][1] == sortPP[i][1]:
+            sortVI[i] = np.append(sortVI[i], sortPP[i][2:])
+    return sortVI
+
+
 # проверка на наличие всех выбранных предметов в списке строки образовательной программы
-def subjectInRow(subList, List):
+def subjectInRow_mirB(subList, List):
     return set(subList) <= set(List)
 
 
 # выделение из элемента списка образовательной программы, всех предметов и их баллах
-def viewSubjectAndBall(row):
+def viewSubjectAndBall_mirB(row):
     SubjectAndBall = []
     for i in range(2, len(row)):
         if (row[i] in SUBJECT) or (re.match(r"\d\d", row[i]) and (not re.match(r"\d\d\.", row[i]))):
@@ -70,48 +82,85 @@ def viewSubjectAndBall(row):
     return SubjectAndBall
 
 
-# доступные студенту образовательные программы по выбранным предметам
-def availableToMe(subject):
-    array_first = arrayFormatting()
-    planList = plan_priema(ID_PP)
+# считаем платников
+def valuePay(lst):
+    sumPay = 0
+    for i in range(16, len(lst)):
+        if re.match(r"\d\d", lst[i]):
+            sumPay += int(lst[i])
+    return sumPay
+
+
+# доступные абитуриенту образовательные программы МИР по выбранным предметам
+def availableToMe_mirB(subject):
+    array_first = mergerSortList()
     out_all = []
-    summaArray = []  # список содерждащий кол-во выделенных мест под платников для каждого НП
-    var_kcp = 0  # КЦП не рассчитан в этой таблице, считаем сами (КЦП = Всего - Платники)
-    for u in range(len(planList)):
-        summa = 0
-        for k in range(10, len(planList[u])):
-            if re.match(r"\d\d", planList[u][k]) and not (re.match(r"\d\d\.", planList[u][k])):
-                summa += int(planList[u][k])
-        summaArray.append(summa)
     for i in range(len(array_first)):
-        if len(array_first[i]) == 9 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        if len(array_first[i]) == 20 and (subjectInRow_mirB(subject, array_first[i]) is True):
+            kcp_int = int(array_first[i][9]) - (valuePay(array_first[i]))
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
-                'subject_1': str(array_second[0]),
-                'ball_1': str(array_second[1]),
-                'subject_2': str(array_second[2]),
-                'ball_2': str(array_second[3]),
-                'subject_3': str(array_second[4]),
-                'ball_3': str(array_second[5]),
+                'subject_1': str(array_first[i][2]),
+                'ball_1': str(array_first[i][3]),
+                'subject_2': str(array_first[i][5]),
+                'ball_2': str(array_first[i][6]),
+                'subject_3': str(array_first[i][7]),
+                'ball_3': str(array_first[i][8]),
                 'subject_4': "-",
                 'ball_4': "-",
-                'plan_all': str(planList[i][2]),
-                'kcp': str(int(planList[i][2]) - int(summaArray[i])),
-                'special_o': str(planList[i][3]),
-                'special_z': str(planList[i][4]),
-                'special_oz': str(planList[i][5]),
-                'general_o': str(planList[i][7]),
-                'general_z': str(planList[i][8]),
-                'general_oz': str(planList[i][9]),
-                'goal_o': str(planList[i][6]),
-                'goal_oz': str(planList[i][6]),
-                'goal_z': str(planList[i][6]),
-                'pay_o': str(planList[i][10]),
-                'pay_z': str(planList[i][11]),
-                'pay_oz': str(planList[i][12])
+                'plan_all': str(array_first[i][9]),
+                'kcp': str(kcp_int),
+                'special_o': str(array_first[i][10]),
+                'special_z': str(array_first[i][11]),
+                'special_oz': str(array_first[i][12]),
+                'general_o': str(array_first[i][14]),
+                'general_z': str(array_first[i][15]),
+                'general_oz': str(array_first[i][16]),
+                'goal_o': str(array_first[i][13]),
+                'goal_oz': str(array_first[i][13]),
+                'goal_z': str(array_first[i][13]),
+                'pay_o': str(array_first[i][17]),
+                'pay_z': str(array_first[i][18]),
+                'pay_oz': str(array_first[i][19])
+            })
+    return out_all
+
+
+# доступные абитуриенту образовательные программы МИР - бакалавриат
+def availableToAll_mirB():
+    array_first = mergerSortList()
+    out_all = []
+    for i in range(len(array_first)):
+        if len(array_first[i]) == 20:
+            kcp_int = int(array_first[i][9]) - (valuePay(array_first[i]))
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][1]),
+                'level': 'bachelor',
+                'subject_1': str(array_first[i][2]),
+                'ball_1': str(array_first[i][3]),
+                'subject_2': str(array_first[i][5]),
+                'ball_2': str(array_first[i][6]),
+                'subject_3': str(array_first[i][7]),
+                'ball_3': str(array_first[i][8]),
+                'subject_4': "-",
+                'ball_4': "-",
+                'plan_all': str(array_first[i][9]),
+                'kcp': str(kcp_int),
+                'special_o': str(array_first[i][10]),
+                'special_z': str(array_first[i][11]),
+                'special_oz': str(array_first[i][12]),
+                'general_o': str(array_first[i][14]),
+                'general_z': str(array_first[i][15]),
+                'general_oz': str(array_first[i][16]),
+                'goal_o': str(array_first[i][13]),
+                'goal_oz': str(array_first[i][13]),
+                'goal_z': str(array_first[i][13]),
+                'pay_o': str(array_first[i][17]),
+                'pay_z': str(array_first[i][18]),
+                'pay_oz': str(array_first[i][19])
             })
     return out_all
 
@@ -119,4 +168,4 @@ def availableToMe(subject):
 test = ['Математика']
 
 with open('src/mir_bach.json', 'w', encoding="utf-8") as fp:
-    json.dump(availableToMe(test), fp, ensure_ascii=False)
+    json.dump(availableToAll_mirB(), fp, ensure_ascii=False)

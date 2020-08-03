@@ -4,21 +4,22 @@ from bs4 import BeautifulSoup
 from text import *
 import re
 import itertools
+import numpy as np
 
-URL_SGSPU = 'http://www.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
-ID_SGSPU_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
-ID_SGSPU_PP = ['class', 'table table-bordered table-condensed table-scroll-thead table-free-cel']
+URL_SSEU_M = 'http://www.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
+ID_SSEU_M_VI = 8
+ID_SSEU_M_PP = 1
 
 
-def parse(url, teg):
+def parse_sseuM(url, teg):
     r = requests.get(url, headers=HEADERS)
     r.encoding = 'utf-8'
     html = r
     if html.status_code == 200:
         soup = BeautifulSoup(html.text, 'html.parser')
-        tablici = soup.find_all('table', teg)
-        table_spec = tablici[1]
-        table_rows = table_spec.find_all('tr')
+        tablici = soup.find_all('table')
+        table = tablici[teg]
+        table_rows = table.find_all('tr')
         newsList = []
         for tr in table_rows:
             td = tr.find_all('td')
@@ -30,10 +31,11 @@ def parse(url, teg):
 
 
 # форматирование списка образовальных программ
-def plan_priema():
-    newsList = parse(URL_SGSPU, ID_SGSPU_PP)
+def plan_priema_sseuM():
+    newsList = parse_sseuM(URL_SSEU_M, ID_SSEU_M_PP)
     del newsList[:4]
     for i in range(len(newsList)):
+        del newsList[i][0]
         for j in range(len(newsList[i])):
             if newsList[i][j] == '-':
                 newsList[i][j] = 'Приём не ведётся'
@@ -41,9 +43,9 @@ def plan_priema():
 
 
 # форматирование списка образовальных программ
-def arrayFormatting():
+def arrayFormatting_sseuM():
     list_super_new = []
-    newsList = parse(URL_SGSPU, ID_SGSPU_VI)
+    newsList = parse_sseuM(URL_SSEU_M, ID_SSEU_M_VI)
     del newsList[:2]
     an_iterator = itertools.groupby(newsList, lambda x: x[0])
     newL = []
@@ -57,17 +59,29 @@ def arrayFormatting():
     for i in range(len(list_super_new)):
         for j in range(len(list_super_new[i])):
             if list_super_new[i][j] == 'Письменная':
-                list_super_new[i][j+1] = 'русский'
+                list_super_new[i][j + 1] = 'русский'
     return list_super_new
 
 
+# сортировка по 2 элементу (алф.порядок) двоих списков и объеденение их
+def mergerSortList():
+    listPP = plan_priema_sseuM()
+    listVI = arrayFormatting_sseuM()
+    sortVI = sorted(listVI, key=lambda x: x[1])
+    sortPP = sorted(listPP, key=lambda x: x[1])
+    for i in range(len(sortVI)):
+        if sortVI[i][1] == sortPP[i][1]:
+            sortVI[i] = np.append(sortVI[i], sortPP[i][2:])
+    return sortVI
+
+
 # проверка на наличие всех выбранных предметов в списке строки образовательной программы
-def subjectInRow(subList, List):
+def subjectInRow_sseuM(subList, List):
     return set(subList) <= set(List)
 
 
 # выделение из элемента списка образовательной программы, всех предметов и их баллах
-def viewSubjectAndBall(row):
+def viewSubjectAndBall_sseuM(row):
     SubjectAndBall = []
     for i in range(2, len(row)):
         if (row[i] in SUBJECT) or (re.match(r"\d\d", row[i]) and (not re.match(r"\d\d\.", row[i]))):
@@ -75,45 +89,77 @@ def viewSubjectAndBall(row):
     return SubjectAndBall
 
 
-# доступные студенту образовательные программы по выбранным предметам
-def availableToMe(subject):
-    array_first = arrayFormatting()
-    planList = plan_priema()
+# доступные абитуриенту образовательные программы СГЭУ по выбранным предметам
+def availableToMe_sseuM(subject):
+    array_first = mergerSortList()
     out_all = []
     for i in range(len(array_first)):
-        if len(array_first[i]) == 9 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        if len(array_first[i]) == 23 and (subjectInRow_sseuM(subject, array_first[i]) is True):
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
-                'subject_1': str(array_second[0]),
-                'ball_1': str(array_second[1]),
+                'subject_1': str(array_first[i][4]),
+                'ball_1': str(array_first[i][6]),
                 'subject_2': "-",
                 'ball_2': "-",
                 'subject_3': "-",
                 'ball_3': "-",
                 'subject_4': "-",
                 'ball_4': "-",
-                'plan_all': str(planList[i][3]),
-                'kcp': str(planList[i][4]),
-                'special_o': str(planList[i][5]),
-                'special_z': str(planList[i][6]),
-                'special_oz': str(planList[i][7]),
-                'general_o': str(planList[i][8]),
-                'general_z': str(planList[i][9]),
-                'general_oz': str(planList[i][10]),
-                'goal_o': str(planList[i][11]),
-                'goal_oz': str(planList[i][12]),
-                'goal_z': str(planList[i][13]),
-                'pay_o': str(planList[i][14]),
-                'pay_z': str(planList[i][15]),
-                'pay_oz': str(planList[i][16])
+                'plan_all': str(array_first[i][9]),
+                'kcp': str(array_first[i][10]),
+                'special_o': str(array_first[i][11]),
+                'special_z': str(array_first[i][12]),
+                'special_oz': str(array_first[i][13]),
+                'general_o': str(array_first[i][14]),
+                'general_z': str(array_first[i][15]),
+                'general_oz': str(array_first[i][16]),
+                'goal_o': str(array_first[i][17]),
+                'goal_oz': str(array_first[i][18]),
+                'goal_z': str(array_first[i][19]),
+                'pay_o': str(array_first[i][20]),
+                'pay_z': str(array_first[i][21]),
+                'pay_oz': str(array_first[i][22]),
             })
     return out_all
 
 
-test = ['Теория менеджмента']
+# все образовательные программы СГЭУ - магистратура
+def availableToAll_sseuM():
+    array_first = mergerSortList()
+    out_all = []
+    for i in range(len(array_first)):
+        if len(array_first[i]) == 23:
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][1]),
+                'level': 'magistr',
+                'subject_1': str(array_first[i][4]),
+                'ball_1': str(array_first[i][6]),
+                'subject_2': "-",
+                'ball_2': "-",
+                'subject_3': "-",
+                'ball_3': "-",
+                'subject_4': "-",
+                'ball_4': "-",
+                'plan_all': str(array_first[i][9]),
+                'kcp': str(array_first[i][10]),
+                'special_o': str(array_first[i][11]),
+                'special_z': str(array_first[i][12]),
+                'special_oz': str(array_first[i][13]),
+                'general_o': str(array_first[i][14]),
+                'general_z': str(array_first[i][15]),
+                'general_oz': str(array_first[i][16]),
+                'goal_o': str(array_first[i][17]),
+                'goal_oz': str(array_first[i][18]),
+                'goal_z': str(array_first[i][19]),
+                'pay_o': str(array_first[i][20]),
+                'pay_z': str(array_first[i][21]),
+                'pay_oz': str(array_first[i][22]),
+            })
+    return out_all
+
 
 with open('src/sseu_mag.json', 'w', encoding="utf-8") as fp:
-    json.dump(availableToMe(test), fp, ensure_ascii=False)
+    json.dump(availableToAll_sseuM(), fp, ensure_ascii=False)

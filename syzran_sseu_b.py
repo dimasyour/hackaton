@@ -5,12 +5,12 @@ from text import *
 import re
 import itertools
 
-URL = 'http://www.syzran.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
-ID_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
-ID_PP = ['class', 'table table-bordered table-condensed table-scroll-thead table-free-cel']
+URL_SYZRAN_SSEU_B = 'http://www.syzran.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
+ID_SYZRAN_SSEU_B_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
+ID_SYZRAN_SSEU_B_PP = ['class', 'table table-bordered table-condensed table-scroll-thead table-free-cel']
 
 
-def parse(url, teg):
+def parse_syzran_sseu_B(url, teg):
     r = requests.get(url, headers=HEADERS)
     r.encoding = 'utf-8'
     html = r
@@ -29,8 +29,8 @@ def parse(url, teg):
 
 
 # форматирование списка образовальных программ
-def plan_priema():
-    newsList = parse(URL, ID_PP)
+def plan_priema_syzran_sseu_B():
+    newsList = parse_syzran_sseu_B(URL_SYZRAN_SSEU_B, ID_SYZRAN_SSEU_B_PP)
     del newsList[:4]
     for i in range(len(newsList)):
         for j in range(len(newsList[i])):
@@ -40,9 +40,9 @@ def plan_priema():
 
 
 # форматирование списка образовальных программ
-def arrayFormatting():
+def arrayFormatting_syzran_sseu_B():
     list_super_new = []
-    newsList = parse(URL, ID_VI)
+    newsList = parse_syzran_sseu_B(URL_SYZRAN_SSEU_B, ID_SYZRAN_SSEU_B_VI)
     del newsList[:2]
     an_iterator = itertools.groupby(newsList, lambda x: x[0])
     newL = []
@@ -61,12 +61,12 @@ def arrayFormatting():
 
 
 # проверка на наличие всех выбранных предметов в списке строки образовательной программы
-def subjectInRow(subList, List):
+def subjectInRow_syzran_sseu_B(subList, List):
     return set(subList) <= set(List)
 
 
 # выделение из элемента списка образовательной программы, всех предметов и их баллах
-def viewSubjectAndBall(row):
+def viewSubjectAndBall_syzran_sseu_B(row):
     SubjectAndBall = []
     for i in range(2, len(row)):
         if (row[i] in SUBJECT) or (re.match(r"\d\d", row[i]) and (not re.match(r"\d\d\.", row[i]))):
@@ -74,15 +74,14 @@ def viewSubjectAndBall(row):
     return SubjectAndBall
 
 
-# доступные студенту образовательные программы по выбранным предметам
-def availableToMe(subject):
-    array_first = arrayFormatting()
-    planList = plan_priema()
+# все образовательные программы Сызранский Филиал СГЭУ - специалитет
+def availableToMe_syzran_sseu_B(subject):
+    array_first = arrayFormatting_syzran_sseu_B()
+    planList = plan_priema_syzran_sseu_B()
     out_all = []
-    print(planList[0])
     for i in range(len(array_first)):
-        if len(array_first[i]) == 18 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        if len(array_first[i]) == 21 and (subjectInRow_syzran_sseu_B(subject, array_first[i]) is True):
+            array_second = viewSubjectAndBall_syzran_sseu_B(array_first[i])
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
@@ -110,8 +109,8 @@ def availableToMe(subject):
                 'pay_z': str(planList[i][12]),
                 'pay_oz': str(planList[i][13])
             })
-        elif len(array_first[i]) == 23 and (subjectInRow(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall(array_first[i])
+        elif len(array_first[i]) == 26 and (subjectInRow_syzran_sseu_B(subject, array_first[i]) is True):
+            array_second = viewSubjectAndBall_syzran_sseu_B(array_first[i])
             out_all.append({
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
@@ -141,7 +140,73 @@ def availableToMe(subject):
             })
     return out_all
 
-test = ['Обществознание']
+
+# доступные абитуриенту образовательные программы Cызранский Филиал СГЭУ - бакалавриат
+def availableToAll_syzran_sseu_B():
+    array_first = arrayFormatting_syzran_sseu_B()
+    planList = plan_priema_syzran_sseu_B()
+    out_all = []
+    for i in range(len(array_first)):
+        if len(array_first[i]) == 21:
+            array_second = viewSubjectAndBall_syzran_sseu_B(array_first[i])
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][1]),
+                'level': 'bachelor',
+                'subject_1': str(array_second[0]),
+                'ball_1': str(array_second[1]),
+                'subject_2': str(array_second[2]),
+                'ball_2': str(array_second[3]),
+                'subject_3': str(array_second[4]),
+                'ball_3': str(array_second[5]),
+                'subject_4': "-",
+                'ball_4': "-",
+                'plan_all': str(planList[i][3]),
+                'kcp': str(planList[i][4]),
+                'special_o': str(planList[i][5]),
+                'special_z': str(planList[i][6]),
+                'special_oz': str(planList[i][7]),
+                'general_o': str(planList[i][8]),
+                'general_z': str(planList[i][9]),
+                'general_oz': str(planList[i][10]),
+                'goal_o': 'Приём не ведётся',
+                'goal_oz': 'Приём не ведётся',
+                'goal_z': 'Приём не ведётся',
+                'pay_o': str(planList[i][11]),
+                'pay_z': str(planList[i][12]),
+                'pay_oz': str(planList[i][13])
+            })
+        elif len(array_first[i]) == 26:
+            array_second = viewSubjectAndBall_syzran_sseu_B(array_first[i])
+            out_all.append({
+                'code': str(array_first[i][0]),
+                'program': str(array_first[i][1]),
+                'level': 'bachelor',
+                'subject_1': str(array_second[0]),
+                'ball_1': str(array_second[1]),
+                'subject_2': str(array_second[2]),
+                'ball_2': str(array_second[3]),
+                'subject_3': str(array_second[4]),
+                'ball_3': str(array_second[5]),
+                'subject_4': str(array_second[6]),
+                'ball_4': str(array_second[7]),
+                'plan_all': str(planList[i][3]),
+                'kcp': str(planList[i][4]),
+                'special_o': str(planList[i][5]),
+                'special_z': str(planList[i][6]),
+                'special_oz': str(planList[i][7]),
+                'general_o': str(planList[i][8]),
+                'general_z': str(planList[i][9]),
+                'general_oz': str(planList[i][10]),
+                'goal_o': 'Приём не ведётся',
+                'goal_oz': 'Приём не ведётся',
+                'goal_z': 'Приём не ведётся',
+                'pay_o': str(planList[i][11]),
+                'pay_z': str(planList[i][12]),
+                'pay_oz': str(planList[i][13])
+            })
+    return out_all
+
 
 with open('src/syzran_sseu_bach.json', 'w', encoding="utf-8") as fp:
-    json.dump(availableToMe(test), fp, ensure_ascii=False)
+    json.dump(availableToAll_syzran_sseu_B(), fp, ensure_ascii=False)
