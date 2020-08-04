@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SGSPU_S = 'http://www.pgsga.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SGSPU_S_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
@@ -83,6 +85,7 @@ def availableToMe_sgspuS(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -112,6 +115,7 @@ def availableToMe_sgspuS(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -146,10 +150,11 @@ def availableToAll_sgspuS():
     for i in range(len(array_first)):
         if len(array_first[i]) == 22:
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all.append({
+            out_all = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -172,13 +177,14 @@ def availableToAll_sgspuS():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28:
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all.append({
+            out_all = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -201,7 +207,7 @@ def availableToAll_sgspuS():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 

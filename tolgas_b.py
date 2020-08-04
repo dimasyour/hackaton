@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
-import pandas as pd
 import re
+
+import pandas as pd
 from openpyxl import load_workbook
 
 
@@ -104,6 +105,7 @@ def viewExcel_tolgas_b():
                 'code': str(codeAndProgram[0]),
                 'program': str(codeAndProgram[1]),
                 'level': 'bachelor',
+                'vuz': 'tolgas',
                 'subject_1': str(column_c_vi[i - 1].value),
                 'ball_1': str(column_c_vi[i].value),
                 'subject_2': str(column_e_vi[i - 1].value),

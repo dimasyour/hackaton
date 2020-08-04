@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SYZRAN_SSEU_B = 'http://www.syzran.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SYZRAN_SSEU_B_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
@@ -56,7 +58,7 @@ def arrayFormatting_syzran_sseu_B():
     for i in range(len(list_super_new)):
         for j in range(len(list_super_new[i])):
             if list_super_new[i][j] == 'Письменная':
-                list_super_new[i][j+1] = 'русский'
+                list_super_new[i][j + 1] = 'русский'
     return list_super_new
 
 
@@ -86,6 +88,7 @@ def availableToMe_syzran_sseu_B(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'syzran_sseu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -115,6 +118,7 @@ def availableToMe_syzran_sseu_B(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'syzran_sseu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),

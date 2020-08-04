@@ -1,10 +1,12 @@
+import itertools
 import json
+import re
+
+import numpy as np
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
-import numpy as np
 
 URL_SSEU_M = 'http://www.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SSEU_M_VI = 8
@@ -135,6 +137,7 @@ def availableToAll_sseuM():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
+                'vuz': 'sseu',
                 'subject_1': str(array_first[i][4]),
                 'ball_1': str(array_first[i][6]),
                 'subject_2': "-",

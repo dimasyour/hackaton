@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SAMGUPS_B = 'https://www.samgups.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SAMGUPS_B_VI = 5
@@ -83,6 +85,7 @@ def availableToMe_samgupsB(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -112,6 +115,7 @@ def availableToMe_samgupsB(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),

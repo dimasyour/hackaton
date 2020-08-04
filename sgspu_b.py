@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SGSPU_B = 'http://www.pgsga.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SGSPU_B_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
@@ -83,6 +85,7 @@ def availableToMe_sgspuB(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -112,6 +115,7 @@ def availableToMe_sgspuB(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
+                'vuz': 'sgspu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),

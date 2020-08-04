@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SSEU_S = 'http://www.sseu.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SSEU_S_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
@@ -154,6 +156,7 @@ def availableToAll_sseuS():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'sseu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -183,6 +186,7 @@ def availableToAll_sseuS():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'sseu',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),

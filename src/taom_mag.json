@@ -1,1 +1,29 @@
-[{"code": "38.04.02", "program": "Менеджмент", "level": "magistr", "subject_1": "Междисциплинарный экзамен", "ball_1": "61", "subject_2": "-", "ball_2": "-", "subject_3": "-", "ball_3": "-", "subject_4": "-", "ball_4": "-", "plan_all": "36", "kcp": "6", "special_o": "0", "special_z": "Приём не ведётся", "special_oz": "0", "general_o": "6", "general_z": "Приём не ведётся", "general_oz": "0", "goal_o": "0", "goal_oz": "Приём не ведётся", "goal_z": "0", "pay_o": "20", "pay_z": "Приём не ведётся", "pay_oz": "10"}]
+[
+  {
+    "code": "38.04.02",
+    "program": "Менеджмент",
+    "level": "magistr",
+    "subject_1": "Междисциплинарный экзамен",
+    "ball_1": "61",
+    "subject_2": "-",
+    "ball_2": "-",
+    "subject_3": "-",
+    "ball_3": "-",
+    "subject_4": "-",
+    "ball_4": "-",
+    "plan_all": "36",
+    "kcp": "6",
+    "special_o": "0",
+    "special_z": "Приём не ведётся",
+    "special_oz": "0",
+    "general_o": "6",
+    "general_z": "Приём не ведётся",
+    "general_oz": "0",
+    "goal_o": "0",
+    "goal_oz": "Приём не ведётся",
+    "goal_z": "0",
+    "pay_o": "20",
+    "pay_z": "Приём не ведётся",
+    "pay_oz": "10"
+  }
+]

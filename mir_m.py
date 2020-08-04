@@ -1,8 +1,10 @@
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
 
 URL_MIR_M = 'https://www.imi-samara.ru/abitur/magistr/'
 ID_MIR_M_VI = 0
@@ -80,6 +82,7 @@ def availableToMe_mirM(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
+                'vuz': 'mir',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': "-",
@@ -126,6 +129,7 @@ def availableToAll_mirM():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
+                'vuz': 'mir',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': "-",

@@ -1,10 +1,12 @@
+import itertools
 import json
+import re
+
+import numpy as np
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
-import numpy as np
 
 URL_MIR_B = 'https://www.imi-samara.ru/abitur/bachelor/'
 ID_MIR_B_VI = 0
@@ -102,6 +104,7 @@ def availableToMe_mirB(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'mir',
                 'subject_1': str(array_first[i][2]),
                 'ball_1': str(array_first[i][3]),
                 'subject_2': str(array_first[i][5]),
@@ -139,6 +142,7 @@ def availableToAll_mirB():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'mir',
                 'subject_1': str(array_first[i][2]),
                 'ball_1': str(array_first[i][3]),
                 'subject_2': str(array_first[i][5]),

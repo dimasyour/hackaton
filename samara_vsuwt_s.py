@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL = 'http://samara.vsuwt.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_VI = ['class', 'table table-bordered table-condensed table-scroll-thead']
@@ -70,6 +72,7 @@ def viewSubjectAndBall(row):
             SubjectAndBall.append(row[i])
     return SubjectAndBall
 
+
 # TODO: когда заполнять страницу - подкорректировать эту функцию
 # доступные студенту образовательные программы по выбранным предметам
 def availableToMe(subject):
@@ -83,6 +86,7 @@ def availableToMe(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'samara_vsuwt',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -112,6 +116,7 @@ def availableToMe(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
+                'vuz': 'samara_vsuwt',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),

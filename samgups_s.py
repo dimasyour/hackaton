@@ -1,9 +1,11 @@
+import itertools
 import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
+
 from text import *
-import re
-import itertools
 
 URL_SAMGUPS_S = 'https://www.samgups.ru/abitur/bachelor/#abitur_vstupitelnye-ispytania'
 ID_SAMGUPS_S_VI = 6
@@ -83,6 +85,7 @@ def availableToMe_samgupsS(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -112,6 +115,7 @@ def availableToMe_samgupsS(subject):
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -150,6 +154,7 @@ def availableToAll_samgupsS():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
@@ -179,6 +184,7 @@ def availableToAll_samgupsS():
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
+                'vuz': 'samgups',
                 'subject_1': str(array_second[0]),
                 'ball_1': str(array_second[1]),
                 'subject_2': str(array_second[2]),
