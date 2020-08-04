@@ -1,6 +1,7 @@
 import sqlite3
+
 import colorama
-from datetime import datetime
+
 from text import *
 
 conn = sqlite3.connect("src/base.db")

@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 import json
 import logging
 import os
 import random
-import time
-import apiai
 import re
+import time
+
+import apiai
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-import datetime
 
-from db import *
 from command import *
+from db import *
 from keyboard import *
 
 logging.basicConfig(filename=FILE_NAME_LOG, level=logging.INFO)

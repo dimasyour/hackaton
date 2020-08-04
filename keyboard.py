@@ -57,6 +57,3 @@ def keyboard_insert_ball():
     keyboard.add_line()
     keyboard.add_button('📖 Назад к выбору предмета', VkKeyboardColor.NEGATIVE)
     return keyboard.get_keyboard()
-
-
-
