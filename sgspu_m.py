@@ -1,7 +1,8 @@
 import itertools
 import json
+import random
 import re
-
+import numpy as np
 import requests
 from bs4 import BeautifulSoup
 
@@ -36,6 +37,7 @@ def plan_priema_sgspuM():
     newsList = parse_sgspuM(URL_SGSPU_M, ID_SGSPU_M_PP)
     del newsList[:4]
     for i in range(len(newsList)):
+        del newsList[i][0]
         for j in range(len(newsList[i])):
             if newsList[i][j] == '-':
                 newsList[i][j] = 'Приём не ведётся'
@@ -59,6 +61,18 @@ def arrayFormatting_sgspuM():
     return list_super_new
 
 
+# сортировка по 2 элементу (алф.порядок) двоих списков и объеденение их
+def mergerSortList():
+    listPP = plan_priema_sgspuM()
+    listVI = arrayFormatting_sgspuM()
+    sortVI = sorted(listVI, key=lambda x: x[1])
+    sortPP = sorted(listPP, key=lambda x: x[1])
+    for i in range(len(sortVI)):
+        if sortVI[i][1] == sortPP[i][1]:
+            sortVI[i] = np.append(sortVI[i], sortPP[i][3:])
+    return sortVI
+
+
 # проверка на наличие всех выбранных предметов в списке строки образовательной программы
 def subjectInRow_sgspuM(subList, List):
     return set(subList) <= set(List)
@@ -75,83 +89,77 @@ def viewSubjectAndBall_sgspuM(row):
 
 # доступные абитуриенту образовательные программы СГСПУ по выбранным предметам
 def availableToMe_sgspuM(subject):
-    array_first = arrayFormatting_sgspuM()
-    planList = plan_priema_sgspuM()
-    out_all = []
+    array_first = mergerSortList()
+    out_all = {}
     for i in range(len(array_first)):
-        if len(array_first[i]) == 10 and (subjectInRow_sgspuM(subject, array_first[i]) is True):
-            array_second = viewSubjectAndBall_sgspuM(array_first[i])
-            out_all.append({
+        if len(array_first[i]) == 24 and (subjectInRow_sgspuM(subject, array_first[i]) is True):
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'magistr',
                 'vuz': 'sgspu',
-                'subject_1': str(array_second[0]),
-                'ball_1': str(array_second[1]),
+                'subject_1': str(array_first[i][5]),
+                'ball_1': str(array_first[i][7]),
                 'subject_2': "-",
                 'ball_2': "-",
                 'subject_3': "-",
                 'ball_3': "-",
                 'subject_4': "-",
                 'ball_4': "-",
-                'plan_all': str(planList[i][4]),
-                'kcp': str(planList[i][5]),
-                'special_o': str(planList[i][6]),
-                'special_z': str(planList[i][7]),
-                'special_oz': str(planList[i][8]),
-                'general_o': str(planList[i][9]),
-                'general_z': str(planList[i][10]),
-                'general_oz': str(planList[i][11]),
-                'goal_o': str(planList[i][12]),
-                'goal_oz': str(planList[i][13]),
-                'goal_z': str(planList[i][14]),
-                'pay_o': str(planList[i][15]),
-                'pay_z': str(planList[i][16]),
-                'pay_oz': str(planList[i][17])
-            })
+                'plan_all': str(array_first[i][10]),
+                'kcp': str(array_first[i][11]),
+                'special_o': str(array_first[i][12]),
+                'special_z': str(array_first[i][13]),
+                'special_oz': str(array_first[i][14]),
+                'general_o': str(array_first[i][15]),
+                'general_z': str(array_first[i][16]),
+                'general_oz': str(array_first[i][17]),
+                'goal_o': str(array_first[i][18]),
+                'goal_oz': str(array_first[i][19]),
+                'goal_z': str(array_first[i][20]),
+                'pay_o': str(array_first[i][21]),
+                'pay_z': str(array_first[i][22]),
+                'pay_oz': str(array_first[i][23])
+            }
     return out_all
 
 
 # все образовательные программы СГСПУ - магистратура
 def availableToAll_sgspuM():
-    array_first = arrayFormatting_sgspuM()
-    planList = plan_priema_sgspuM()
-    out_all = []
+    array_first = mergerSortList()
+    out_all = {}
     for i in range(len(array_first)):
-        if len(array_first[i]) == 10:
-            array_second = viewSubjectAndBall_sgspuM(array_first[i])
-            out_all.append({
+        if len(array_first[i]) == 24:
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'magistr',
                 'vuz': 'sgspu',
-                'subject_1': str(array_second[0]),
-                'ball_1': str(array_second[1]),
+                'subject_1': str(array_first[i][5]),
+                'ball_1': str(array_first[i][7]),
                 'subject_2': "-",
                 'ball_2': "-",
                 'subject_3': "-",
                 'ball_3': "-",
                 'subject_4': "-",
                 'ball_4': "-",
-                'plan_all': str(planList[i][4]),
-                'kcp': str(planList[i][5]),
-                'special_o': str(planList[i][6]),
-                'special_z': str(planList[i][7]),
-                'special_oz': str(planList[i][8]),
-                'general_o': str(planList[i][9]),
-                'general_z': str(planList[i][10]),
-                'general_oz': str(planList[i][11]),
-                'goal_o': str(planList[i][12]),
-                'goal_oz': str(planList[i][13]),
-                'goal_z': str(planList[i][14]),
-                'pay_o': str(planList[i][15]),
-                'pay_z': str(planList[i][16]),
-                'pay_oz': str(planList[i][17])
-            })
+                'plan_all': str(array_first[i][10]),
+                'kcp': str(array_first[i][11]),
+                'special_o': str(array_first[i][12]),
+                'special_z': str(array_first[i][13]),
+                'special_oz': str(array_first[i][14]),
+                'general_o': str(array_first[i][15]),
+                'general_z': str(array_first[i][16]),
+                'general_oz': str(array_first[i][17]),
+                'goal_o': str(array_first[i][18]),
+                'goal_oz': str(array_first[i][19]),
+                'goal_z': str(array_first[i][20]),
+                'pay_o': str(array_first[i][21]),
+                'pay_z': str(array_first[i][22]),
+                'pay_oz': str(array_first[i][23])
+            }
     return out_all
 
-
-test = ['Собеседование']
 
 with open('src/sgspu_mag.json', 'w', encoding="utf-8") as fp:
     json.dump(availableToAll_sgspuM(), fp, ensure_ascii=False)

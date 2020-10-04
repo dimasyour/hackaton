@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
+import random
 import re
 
 import pandas as pd
 from openpyxl import load_workbook
+
+from text import *
 
 
 def parse_tolgas_b():
@@ -92,7 +95,7 @@ def viewExcel_tolgas_b():
     column_p_vi = sheet_ranges_vi['P']
     column_q_vi = sheet_ranges_vi['Q']
 
-    out_all = []
+    out_all = {}
     for i in range(1, len(column_b_vi)):
         if column_b_vi[i].value is None:
             pass
@@ -101,7 +104,7 @@ def viewExcel_tolgas_b():
             pay_o = column_p_vi[i].value
             pay_z = column_q_vi[i].value
             kcp = int(column_k_vi[i].value) - (int(pay_o.replace('-', '0')) + int(pay_z.replace('-', '0')))
-            out_all.append({
+            out_all[codeAndProgram[0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(codeAndProgram[0]),
                 'program': str(codeAndProgram[1]),
                 'level': 'bachelor',
@@ -128,7 +131,7 @@ def viewExcel_tolgas_b():
                 'pay_o': str(column_p_vi[i].value),
                 'pay_z': str(column_q_vi[i].value),
                 'pay_oz': "-"
-            })
+            }
     return out_all
 
 

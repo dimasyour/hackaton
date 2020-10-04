@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import numpy as np
@@ -96,11 +97,11 @@ def valuePay(lst):
 # доступные абитуриенту образовательные программы МИР по выбранным предметам
 def availableToMe_mirB(subject):
     array_first = mergerSortList()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 20 and (subjectInRow_mirB(subject, array_first[i]) is True):
             kcp_int = int(array_first[i][9]) - (valuePay(array_first[i]))
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -127,18 +128,18 @@ def availableToMe_mirB(subject):
                 'pay_o': str(array_first[i][17]),
                 'pay_z': str(array_first[i][18]),
                 'pay_oz': str(array_first[i][19])
-            })
+            }
     return out_all
 
 
 # доступные абитуриенту образовательные программы МИР - бакалавриат
 def availableToAll_mirB():
     array_first = mergerSortList()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 20:
             kcp_int = int(array_first[i][9]) - (valuePay(array_first[i]))
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -165,11 +166,9 @@ def availableToAll_mirB():
                 'pay_o': str(array_first[i][17]),
                 'pay_z': str(array_first[i][18]),
                 'pay_oz': str(array_first[i][19])
-            })
+            }
     return out_all
 
-
-test = ['Математика']
 
 with open('src/mir_bach.json', 'w', encoding="utf-8") as fp:
     json.dump(availableToAll_mirB(), fp, ensure_ascii=False)

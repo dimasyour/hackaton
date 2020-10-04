@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -78,11 +79,11 @@ def viewSubjectAndBall(row):
 def availableToMe(subject):
     array_first = arrayFormatting()
     planList = plan_priema()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 19 and (subjectInRow(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
@@ -109,10 +110,10 @@ def availableToMe(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 24 and (subjectInRow(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
@@ -139,11 +140,11 @@ def availableToMe(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 
-test = ['Литература']
+test = ['Математика']
 
 with open('src/sgspu_spec.json', 'w', encoding="utf-8") as fp:
     json.dump(availableToMe(test), fp, ensure_ascii=False)
