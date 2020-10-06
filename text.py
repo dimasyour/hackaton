@@ -27,3 +27,11 @@ SUBJECT = ['Математика', 'Русский язык', 'Общество�
            'Теория менеджмента', 'Экономика', 'Менеджмент', 'Государственное и муниципальное управление',
            'Комплексный лингвистический экзамен', 'Композиция', 'Рисунок', 'Информатика и ИКТ', 'Информатика',
            'Междисциплинарный экзамен']
+
+MAX_INTEGER = 999999
+
+list_of_file = ['src/taom_mag.json', 'src/tolgas_bach.json', 'src/mir_bach.json', 'src/mir_mag.json',
+                'src/reaviz_bach.json', 'src/reaviz_spec.json', 'src/samgups_bach.json', 'src/samgups_spec.json',
+                'src/sgspu_bach.json', 'src/sgspu_spec.json', 'src/sgspu_mag.json', 'src/sseu_bach.json',
+                'src/sseu_spec.json', 'src/sseu_mag.json', 'src/taom_bach.json', 'src/syzran_sseu_bach.json',
+                'src/taom_bach.json', 'src/taom_mag.json', 'src/tolgas_bach.json']

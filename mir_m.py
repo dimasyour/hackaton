@@ -1,4 +1,5 @@
 import json
+import random
 import re
 
 import requests
@@ -66,7 +67,7 @@ def viewSubjectAndBall_mirM(row):
 def availableToMe_mirM(subject):
     array_first = arrayFormatting_mirM()
     planList = plan_priema_mirM(ID_MIR_M_PP)
-    out_all = []
+    out_all = {}
     summaArray = []  # список содерждащий кол-во выделенных мест под платников для каждого НП
     var_kcp = 0  # КЦП не рассчитан в этой таблице, считаем сами (КЦП = Всего - Платники)
     for u in range(len(planList)):
@@ -78,7 +79,7 @@ def availableToMe_mirM(subject):
     for i in range(len(array_first)):
         if len(array_first[i]) == 5 and (subjectInRow_mirM(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_mirM(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -105,7 +106,7 @@ def availableToMe_mirM(subject):
                 'pay_o': str(planList[i][9]),
                 'pay_z': str(planList[i][10]),
                 'pay_oz': str(planList[i][11])
-            })
+            }
     return out_all
 
 
@@ -113,7 +114,7 @@ def availableToMe_mirM(subject):
 def availableToAll_mirM():
     array_first = arrayFormatting_mirM()
     planList = plan_priema_mirM(ID_MIR_M_PP)
-    out_all = []
+    out_all = {}
     summaArray = []  # список содерждащий кол-во выделенных мест под платников для каждого НП
     var_kcp = 0  # КЦП не рассчитан в этой таблице, считаем сами (КЦП = Всего - Платники)
     for u in range(len(planList)):
@@ -125,7 +126,7 @@ def availableToAll_mirM():
     for i in range(len(array_first)):
         if len(array_first[i]) == 5:
             array_second = viewSubjectAndBall_mirM(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -152,11 +153,9 @@ def availableToAll_mirM():
                 'pay_o': str(planList[i][9]),
                 'pay_z': str(planList[i][10]),
                 'pay_oz': str(planList[i][11])
-            })
+            }
     return out_all
 
-
-test = ['Комплексный лингвистический экзамен']
 
 with open('src/mir_mag.json', 'w', encoding="utf-8") as fp:
     json.dump(availableToAll_mirM(), fp, ensure_ascii=False)

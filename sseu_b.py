@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -80,11 +81,11 @@ def viewSubjectAndBall_sseuB(row):
 def availableToMe_sseuB(subject):
     array_first = arrayFormatting_sseuB()
     planList = plan_priema_sseuB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 21 and (subjectInRow_sseuB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sseuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -110,10 +111,10 @@ def availableToMe_sseuB(subject):
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
         elif len(array_first[i]) == 27 and (subjectInRow_sseuB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sseuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -139,7 +140,7 @@ def availableToMe_sseuB(subject):
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 
@@ -147,11 +148,11 @@ def availableToMe_sseuB(subject):
 def availableToAll_sseuB():
     array_first = arrayFormatting_sseuB()
     planList = plan_priema_sseuB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 21:
             array_second = viewSubjectAndBall_sseuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -178,10 +179,10 @@ def availableToAll_sseuB():
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
         elif len(array_first[i]) == 27:
             array_second = viewSubjectAndBall_sseuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -208,7 +209,7 @@ def availableToAll_sseuB():
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 

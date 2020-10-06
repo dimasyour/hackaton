@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -80,11 +81,11 @@ def viewSubjectAndBall_taomB(row):
 def availableToMe_taomB(subject):
     array_first = arrayFormatting_taomB()
     planList = plan_priema_taomB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 21 and (subjectInRow_taomB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_taomB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -111,10 +112,10 @@ def availableToMe_taomB(subject):
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
         elif len(array_first[i]) == 27 and (subjectInRow_taomB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_taomB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -141,7 +142,7 @@ def availableToMe_taomB(subject):
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 
@@ -149,12 +150,11 @@ def availableToMe_taomB(subject):
 def availableToAll_taomB():
     array_first = arrayFormatting_taomB()
     planList = plan_priema_taomB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 21:
             array_second = viewSubjectAndBall_taomB(array_first[i])
-
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -180,10 +180,10 @@ def availableToAll_taomB():
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
         elif len(array_first[i]) == 27:
             array_second = viewSubjectAndBall_taomB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'bachelor',
@@ -209,7 +209,7 @@ def availableToAll_taomB():
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 

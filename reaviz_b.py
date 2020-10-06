@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -84,11 +85,11 @@ def viewSubjectAndBall_reavizB(row):
 def availableToMe_reavizB(subject):
     array_first = arrayFormatting_reavizB()
     planList = plan_priema_reavizB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 22 and (subjectInRow_reavizB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_reavizB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -115,10 +116,10 @@ def availableToMe_reavizB(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28 and (subjectInRow_reavizB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_reavizB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -145,7 +146,7 @@ def availableToMe_reavizB(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 
@@ -153,11 +154,11 @@ def availableToMe_reavizB(subject):
 def availableToAll_reavizB():
     array_first = arrayFormatting_reavizB()
     planList = plan_priema_reavizB()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 22:
             array_second = viewSubjectAndBall_reavizB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -183,10 +184,10 @@ def availableToAll_reavizB():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28:
             array_second = viewSubjectAndBall_reavizB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -212,7 +213,7 @@ def availableToAll_reavizB():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 

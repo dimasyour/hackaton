@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -77,11 +78,11 @@ def viewSubjectAndBall_sgspuS(row):
 def availableToMe_sgspuS(subject):
     array_first = arrayFormatting_sgspuS()
     planList = plan_priema_sgspuS()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 22 and (subjectInRow_sgspuS(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
@@ -108,10 +109,10 @@ def availableToMe_sgspuS(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28 and (subjectInRow_sgspuS(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
@@ -138,7 +139,7 @@ def availableToMe_sgspuS(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 
@@ -146,11 +147,11 @@ def availableToMe_sgspuS(subject):
 def availableToAll_sgspuS():
     array_first = arrayFormatting_sgspuS()
     planList = plan_priema_sgspuS()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 22:
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all = {
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',
@@ -180,7 +181,7 @@ def availableToAll_sgspuS():
             }
         elif len(array_first[i]) == 28:
             array_second = viewSubjectAndBall_sgspuS(array_first[i])
-            out_all = {
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'specialist',

@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import numpy as np
@@ -94,10 +95,10 @@ def viewSubjectAndBall_sseuM(row):
 # доступные абитуриенту образовательные программы СГЭУ по выбранным предметам
 def availableToMe_sseuM(subject):
     array_first = mergerSortList()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 23 and (subjectInRow_sseuM(subject, array_first[i]) is True):
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -123,17 +124,17 @@ def availableToMe_sseuM(subject):
                 'pay_o': str(array_first[i][20]),
                 'pay_z': str(array_first[i][21]),
                 'pay_oz': str(array_first[i][22]),
-            })
+            }
     return out_all
 
 
 # все образовательные программы СГЭУ - магистратура
 def availableToAll_sseuM():
     array_first = mergerSortList()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 23:
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -160,7 +161,7 @@ def availableToAll_sseuM():
                 'pay_o': str(array_first[i][20]),
                 'pay_z': str(array_first[i][21]),
                 'pay_oz': str(array_first[i][22]),
-            })
+            }
     return out_all
 
 

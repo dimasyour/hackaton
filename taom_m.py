@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -81,11 +82,11 @@ def viewSubjectAndBall_taomM(row):
 def availableToMe_taomM(subject):
     array_first = arrayFormatting_taomM()
     planList = plan_priema_taomM()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 9 and (subjectInRow_taomM(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_taomM(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -111,7 +112,7 @@ def availableToMe_taomM(subject):
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 
@@ -119,11 +120,11 @@ def availableToMe_taomM(subject):
 def availableToAll_taomM():
     array_first = arrayFormatting_taomM()
     planList = plan_priema_taomM()
-    out_all = []
+    out_all = {}
     for i in range(len(array_first)):
         if len(array_first[i]) == 9:
             array_second = viewSubjectAndBall_taomM(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][1]),
                 'level': 'magistr',
@@ -150,7 +151,7 @@ def availableToAll_taomM():
                 'pay_o': str(planList[i][14]),
                 'pay_z': str(planList[i][15]),
                 'pay_oz': str(planList[i][16])
-            })
+            }
     return out_all
 
 

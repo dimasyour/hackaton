@@ -1,5 +1,6 @@
 import itertools
 import json
+import random
 import re
 
 import requests
@@ -76,12 +77,12 @@ def viewSubjectAndBall_sgspuB(row):
 def availableToMe_sgspuB(subject):
     array_first = arrayFormatting_sgspuB()
     planList = plan_priema_sgspuB()
-    out_all = []
+    out_all = {}
 
     for i in range(len(array_first)):
         if len(array_first[i]) == 22 and (subjectInRow_sgspuB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sgspuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -108,10 +109,10 @@ def availableToMe_sgspuB(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28 and (subjectInRow_sgspuB(subject, array_first[i]) is True):
             array_second = viewSubjectAndBall_sgspuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -138,7 +139,7 @@ def availableToMe_sgspuB(subject):
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 
@@ -146,12 +147,12 @@ def availableToMe_sgspuB(subject):
 def availableToAll_sgspuB():
     array_first = arrayFormatting_sgspuB()
     planList = plan_priema_sgspuB()
-    out_all = []
+    out_all = {}
 
     for i in range(len(array_first)):
         if len(array_first[i]) == 22:
             array_second = viewSubjectAndBall_sgspuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -177,10 +178,10 @@ def availableToAll_sgspuB():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
         elif len(array_first[i]) == 28:
             array_second = viewSubjectAndBall_sgspuB(array_first[i])
-            out_all.append({
+            out_all[array_first[i][0] + '_' + str(random.randint(0, MAX_INTEGER))] = {
                 'code': str(array_first[i][0]),
                 'program': str(array_first[i][2]),
                 'level': 'bachelor',
@@ -206,7 +207,7 @@ def availableToAll_sgspuB():
                 'pay_o': str(planList[i][15]),
                 'pay_z': str(planList[i][16]),
                 'pay_oz': str(planList[i][17])
-            })
+            }
     return out_all
 
 
